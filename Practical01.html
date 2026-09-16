@@ -1,1 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <title>DAA Practical 1</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #1f2937;
+        }
+
+        .header {
+            background: #172554;
+            color: white;
+            padding: 30px 50px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 32px;
+        }
+
+        .header p {
+            margin: 8px 0 0;
+            font-size: 16px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 18px;
+            padding: 10px 18px;
+            background: white;
+            color: #172554;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+
+        .container {
+            width: 85%;
+            margin: 30px auto;
+        }
+
+        .section {
+            background: white;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 10px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        .section h2 {
+            color: #172554;
+            margin-top: 0;
+        }
+
+        .problem {
+            line-height: 1.7;
+            font-size: 16px;
+        }
+
+        .algorithm ol {
+            line-height: 1.8;
+        }
+
+        pre {
+            background: #111827;
+            color: #f9fafb;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .output {
+            background: #eef2ff;
+            padding: 18px;
+            border-radius: 8px;
+            font-family: monospace;
+        }
+
+        .complexity-box {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .complexity {
+            flex: 1;
+            min-width: 220px;
+            background: #f8fafc;
+            padding: 18px;
+            border-radius: 8px;
+            border-left: 5px solid #172554;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            background: #172554;
+            color: white;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>📘 DAA Practical 1</h1>
+        <p>Design and Analysis of Algorithms — Session 2026-27</p>
+
+        <a href="Practicals/practical01.html">View Practical</a>
+    </div>
+
+    <div class="container">
+
+        <!-- Problem Statement -->
+        <div class="section">
+            <h2>📌 Problem Statement</h2>
+
+            <p class="problem">
+                A DevOps team manages server logs generated across multiple servers
+                in Pune. The logs are currently unsorted, making it difficult to
+                analyze events chronologically. Implement Quick Sort to sort the
+                log entries based on their Unix timestamps.
+            </p>
+        </div>
+
+        <!-- Algorithm -->
+        <div class="section algorithm">
+            <h2>⚙️ Algorithm — Quick Sort</h2>
+
+            <ol>
+                <li>Take the array of Unix timestamps.</li>
+                <li>Select an element as the pivot.</li>
+                <li>Partition the array into two parts:
+                    elements smaller than the pivot and elements greater than the pivot.</li>
+                <li>Recursively apply Quick Sort to the left part.</li>
+                <li>Recursively apply Quick Sort to the right part.</li>
+                <li>After sorting, the timestamps are arranged in chronological order.</li>
+            </ol>
+        </div>
+
+        <!-- C Code -->
+        <div class="section">
+            <h2>💻 C Code</h2>
+
+            <pre>
+#include &lt;stdio.h&gt;
+
+void swap(long long *a, long long *b)
+{
+    long long temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+int partition(long long arr[], int low, int high)
+{
+    long long pivot = arr[high];
+    int i = low - 1;
+
+    for (int j = low; j &lt; high; j++)
+    {
+        if (arr[j] &lt; pivot)
+        {
+            i++;
+            swap(&amp;arr[i], &amp;arr[j]);
+        }
+    }
+
+    swap(&amp;arr[i + 1], &amp;arr[high]);
+
+    return i + 1;
+}
+
+void quickSort(long long arr[], int low, int high)
+{
+    if (low &lt; high)
+    {
+        int pi = partition(arr, low, high);
+
+        quickSort(arr, low, pi - 1);
+        quickSort(arr, pi + 1, high);
+    }
+}
+
+int main()
+{
+    long long timestamps[] = {
+        1725003600,
+        1725000000,
+        1725007200,
+        1724996400,
+        1725001800
+    };
+
+    int n = sizeof(timestamps) / sizeof(timestamps[0]);
+
+    printf("Original timestamps:\n");
+
+    for (int i = 0; i &lt; n; i++)
+    {
+        printf("%lld ", timestamps[i]);
+    }
+
+    quickSort(timestamps, 0, n - 1);
+
+    printf("\n\nSorted timestamps in chronological order:\n");
+
+    for (int i = 0; i &lt; n; i++)
+    {
+        printf("%lld ", timestamps[i]);
+    }
+
+    printf("\n");
+
+    return 0;
+}
+            </pre>
+        </div>
+
+        <!-- Output -->
+        <div class="section">
+            <h2>🖥️ Output</h2>
+
+            <div class="output">
+Original timestamps:<br>
+1725003600 1725000000 1725007200 1724996400 1725001800
+<br><br>
+
+Sorted timestamps in chronological order:<br>
+1724996400 1725000000 1725001800 1725003600 1725007200
+            </div>
+        </div>
+
+        <!-- Complexity -->
+        <div class="section">
+            <h2>📊 Complexity Analysis</h2>
+
+            <div class="complexity-box">
+
+                <div class="complexity">
+                    <h3>⏱ Time Complexity</h3>
+                    <p><b>Average Case:</b> O(n log n)</p>
+                    <p><b>Worst Case:</b> O(n²)</p>
+                </div>
+
+                <div class="complexity">
+                    <h3>💾 Space Complexity</h3>
+                    <p><b>O(log n)</b> average recursion stack.</p>
+                    <p>Worst case can reach <b>O(n)</b>.</p>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        DAA Practical Repository • Janvi Kapse
+    </footer>
+
+</body>
+</html>
