@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,6 +15,7 @@
             color: #1f2937;
         }
 
+        /* Header */
         .header {
             background: #172554;
             color: white;
@@ -26,10 +28,11 @@
         }
 
         .header p {
-            margin: 8px 0 0;
+            margin-top: 8px;
             font-size: 16px;
         }
 
+        /* Back Button */
         .back-btn {
             display: inline-block;
             margin-top: 18px;
@@ -41,17 +44,23 @@
             font-weight: bold;
         }
 
+        .back-btn:hover {
+            background: #e0e7ff;
+        }
+
+        /* Main Container */
         .container {
             width: 85%;
             margin: 30px auto;
         }
 
+        /* Sections */
         .section {
             background: white;
             padding: 25px;
             margin-bottom: 25px;
             border-radius: 10px;
-            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
         }
 
         .section h2 {
@@ -59,15 +68,18 @@
             margin-top: 0;
         }
 
+        /* Problem Statement */
         .problem {
             line-height: 1.7;
             font-size: 16px;
         }
 
+        /* Algorithm */
         .algorithm ol {
             line-height: 1.8;
         }
 
+        /* Code */
         pre {
             background: #111827;
             color: #f9fafb;
@@ -78,13 +90,16 @@
             line-height: 1.5;
         }
 
+        /* Output */
         .output {
             background: #eef2ff;
             padding: 18px;
             border-radius: 8px;
             font-family: monospace;
+            line-height: 1.6;
         }
 
+        /* Complexity */
         .complexity-box {
             display: flex;
             gap: 20px;
@@ -100,6 +115,11 @@
             border-left: 5px solid #172554;
         }
 
+        .complexity h3 {
+            color: #172554;
+        }
+
+        /* Footer */
         footer {
             text-align: center;
             padding: 25px;
@@ -112,44 +132,82 @@
 
 <body>
 
+    <!-- Header -->
     <div class="header">
-        <h1>📘 DAA Practical 1</h1>
-        <p>Design and Analysis of Algorithms — Session 2026-27</p>
 
-            <a href="Practical01.html">View Practical</a>   
+        <h1>📘 DAA Practical 1</h1>
+
+        <p>
+            Design and Analysis of Algorithms — Session 2026-27
+        </p>
+
+        <!-- Back to Dashboard -->
+        <a href="index.html" class="back-btn">
+            ← Back to Dashboard
+        </a>
+
     </div>
+
 
     <div class="container">
 
         <!-- Problem Statement -->
         <div class="section">
+
             <h2>📌 Problem Statement</h2>
 
             <p class="problem">
-                A DevOps team manages server logs generated across multiple servers
-                in Pune. The logs are currently unsorted, making it difficult to
-                analyze events chronologically. Implement Quick Sort to sort the
-                log entries based on their Unix timestamps.
+                A DevOps team manages server logs generated across multiple
+                servers in Pune. The logs are currently unsorted, making it
+                difficult to analyze events chronologically.
+
+                Implement Quick Sort to sort the log entries based on their
+                Unix timestamps.
             </p>
+
         </div>
+
 
         <!-- Algorithm -->
         <div class="section algorithm">
+
             <h2>⚙️ Algorithm — Quick Sort</h2>
 
             <ol>
-                <li>Take the array of Unix timestamps.</li>
-                <li>Select an element as the pivot.</li>
-                <li>Partition the array into two parts:
-                    elements smaller than the pivot and elements greater than the pivot.</li>
-                <li>Recursively apply Quick Sort to the left part.</li>
-                <li>Recursively apply Quick Sort to the right part.</li>
-                <li>After sorting, the timestamps are arranged in chronological order.</li>
+
+                <li>
+                    Start with the array of Unix timestamps.
+                </li>
+
+                <li>
+                    Select an element as the pivot.
+                </li>
+
+                <li>
+                    Partition the array so that smaller elements are placed
+                    before the pivot and larger elements are placed after it.
+                </li>
+
+                <li>
+                    Recursively apply Quick Sort to the left part.
+                </li>
+
+                <li>
+                    Recursively apply Quick Sort to the right part.
+                </li>
+
+                <li>
+                    The timestamps are now arranged in chronological order.
+                </li>
+
             </ol>
+
         </div>
+
 
         <!-- C Code -->
         <div class="section">
+
             <h2>💻 C Code</h2>
 
             <pre>
@@ -165,6 +223,7 @@ void swap(long long *a, long long *b)
 int partition(long long arr[], int low, int high)
 {
     long long pivot = arr[high];
+
     int i = low - 1;
 
     for (int j = low; j &lt; high; j++)
@@ -172,6 +231,7 @@ int partition(long long arr[], int low, int high)
         if (arr[j] &lt; pivot)
         {
             i++;
+
             swap(&amp;arr[i], &amp;arr[j]);
         }
     }
@@ -188,6 +248,7 @@ void quickSort(long long arr[], int low, int high)
         int pi = partition(arr, low, high);
 
         quickSort(arr, low, pi - 1);
+
         quickSort(arr, pi + 1, high);
     }
 }
@@ -225,48 +286,83 @@ int main()
     return 0;
 }
             </pre>
+
         </div>
+
 
         <!-- Output -->
         <div class="section">
+
             <h2>🖥️ Output</h2>
 
             <div class="output">
-Original timestamps:<br>
-1725003600 1725000000 1725007200 1724996400 1725001800
-<br><br>
 
-Sorted timestamps in chronological order:<br>
-1724996400 1725000000 1725001800 1725003600 1725007200
+                Original timestamps:<br>
+                1725003600 1725000000 1725007200
+                1724996400 1725001800
+
+                <br><br>
+
+                Sorted timestamps in chronological order:<br>
+
+                1724996400 1725000000 1725001800
+                1725003600 1725007200
+
             </div>
+
         </div>
+
 
         <!-- Complexity -->
         <div class="section">
+
             <h2>📊 Complexity Analysis</h2>
 
             <div class="complexity-box">
 
                 <div class="complexity">
+
                     <h3>⏱ Time Complexity</h3>
-                    <p><b>Average Case:</b> O(n log n)</p>
-                    <p><b>Worst Case:</b> O(n²)</p>
+
+                    <p>
+                        <b>Best / Average Case:</b> O(n log n)
+                    </p>
+
+                    <p>
+                        <b>Worst Case:</b> O(n²)
+                    </p>
+
                 </div>
 
+
                 <div class="complexity">
+
                     <h3>💾 Space Complexity</h3>
-                    <p><b>O(log n)</b> average recursion stack.</p>
-                    <p>Worst case can reach <b>O(n)</b>.</p>
+
+                    <p>
+                        <b>Average Case:</b> O(log n)
+                    </p>
+
+                    <p>
+                        <b>Worst Case:</b> O(n)
+                    </p>
+
                 </div>
 
             </div>
+
         </div>
 
     </div>
 
+
+    <!-- Footer -->
     <footer>
+
         DAA Practical Repository • Janvi Kapse
+
     </footer>
 
 </body>
+
 </html>
