@@ -24,39 +24,38 @@
 
         .header h1 {
             margin: 0;
-            font-size: 32px;
+            font-size: 30px;
         }
 
         .header p {
-            margin: 10px 0 0;
-            font-size: 17px;
-            color: #dbeafe;
+            margin-top: 8px;
+            font-size: 16px;
         }
 
         .container {
-            width: 90%;
             max-width: 1000px;
             margin: 30px auto;
+            padding: 0 20px;
         }
 
         .back-btn {
             display: inline-block;
-            background: #2563eb;
+            margin-bottom: 20px;
+            padding: 10px 18px;
+            background: #172554;
             color: white;
             text-decoration: none;
-            padding: 10px 18px;
             border-radius: 6px;
-            margin-bottom: 25px;
         }
 
         .back-btn:hover {
-            background: #1d4ed8;
+            background: #1e3a8a;
         }
 
         .section {
             background: white;
             padding: 25px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             border-radius: 10px;
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
         }
@@ -66,53 +65,43 @@
             margin-top: 0;
         }
 
-        .section h3 {
-            color: #1e40af;
-        }
-
-        .code-box {
+        pre {
             background: #111827;
             color: #f9fafb;
             padding: 20px;
             border-radius: 8px;
             overflow-x: auto;
-            font-family: Consolas, monospace;
-            font-size: 14px;
             line-height: 1.5;
-            white-space: pre;
         }
 
-        .output-box {
+        .output {
             background: #ecfdf5;
+            color: #065f46;
             border-left: 5px solid #10b981;
-            padding: 15px 20px;
-            border-radius: 6px;
-            font-family: Consolas, monospace;
-            white-space: pre-wrap;
+        }
+
+        .complexity {
+            background: #eff6ff;
+            border-left: 5px solid #2563eb;
         }
 
         ul {
             line-height: 1.8;
         }
 
-        .complexity {
-            background: #eff6ff;
-            padding: 15px 20px;
-            border-left: 5px solid #2563eb;
+        .matrix {
+            font-family: monospace;
+            background: #f3f4f6;
+            padding: 15px;
             border-radius: 6px;
-        }
-
-        footer {
-            text-align: center;
-            padding: 20px;
-            color: #6b7280;
+            display: inline-block;
+            line-height: 1.7;
         }
     </style>
 </head>
 
 <body>
 
-    <!-- Header -->
     <div class="header">
         <h1>📘 DAA Practical 3</h1>
         <p>Design and Analysis of Algorithms — Session 2026-27</p>
@@ -120,66 +109,78 @@
 
     <div class="container">
 
-        <!-- Back Button -->
-        <a href="index.html" class="back-btn">
-            ← Back to Dashboard
-        </a>
+        <a href="index.html" class="back-btn">← Back to Dashboard</a>
 
-        <!-- Problem Statement -->
         <div class="section">
-            <h2>📌 Problem Statement</h2>
+            <h2>🎯 Problem Statement</h2>
 
             <p>
-                You are an engineer aboard an ISRO interplanetary spacecraft
-                travelling to Mars. The navigation computer needs to perform
-                fast 4×4 matrix multiplications to continuously adjust the
-                spacecraft's flight trajectory.
+                ISRO is planning an interplanetary spacecraft mission to Mars.
+                Efficient matrix multiplication is required for spacecraft
+                computations. For large matrices, the traditional method can
+                be time-consuming.
             </p>
 
             <p>
-                To reduce computational load, implement matrix multiplication
-                using <b>Strassen's Divide and Conquer Matrix Multiplication
-                Algorithm</b>. The 4×4 matrices are divided into 2×2
-                quadrants and Strassen's method is applied recursively.
+                Implement <b>Strassen’s Divide and Conquer Matrix
+                Multiplication</b> algorithm to multiply two 4 × 4 matrices.
+                Split the matrices into 2 × 2 quadrants and recursively apply
+                Strassen’s method.
             </p>
         </div>
 
-        <!-- Algorithm -->
         <div class="section">
-            <h2>⚙️ Algorithm — Strassen's Matrix Multiplication</h2>
+            <h2>📋 Algorithm</h2>
 
             <ol>
-                <li>Take two 4×4 matrices A and B.</li>
-                <li>Divide both matrices into four 2×2 sub-matrices.</li>
-                <li>Calculate seven intermediate products using Strassen's method.</li>
-                <li>Use matrix addition and subtraction to calculate the four result quadrants.</li>
-                <li>Combine the four quadrants to form the final 4×4 matrix.</li>
-                <li>Display the resulting matrix.</li>
+                <li>Take two square matrices A and B.</li>
+                <li>Divide each matrix into four equal-sized sub-matrices.</li>
+                <li>Calculate seven products using Strassen’s formula.</li>
+                <li>Recursively multiply the sub-matrices.</li>
+                <li>Calculate the four result sub-matrices.</li>
+                <li>Combine the four sub-matrices to form the final matrix.</li>
+                <li>Display the resultant matrix.</li>
             </ol>
 
             <h3>Seven Strassen Products</h3>
 
-            <ul>
-                <li>P1 = A11 × (B12 − B22)</li>
-                <li>P2 = (A11 + A12) × B22</li>
-                <li>P3 = (A21 + A22) × B11</li>
-                <li>P4 = A22 × (B21 − B11)</li>
-                <li>P5 = (A11 + A22) × (B11 + B22)</li>
-                <li>P6 = (A12 − A22) × (B21 + B22)</li>
-                <li>P7 = (A11 − A21) × (B11 + B12)</li>
-            </ul>
+            <pre>
+M1 = (A11 + A22) × (B11 + B22)
+
+M2 = (A21 + A22) × B11
+
+M3 = A11 × (B12 - B22)
+
+M4 = A22 × (B21 - B11)
+
+M5 = (A11 + A12) × B22
+
+M6 = (A21 - A11) × (B11 + B12)
+
+M7 = (A12 - A22) × (B21 + B22)
+            </pre>
+
+            <h3>Result Matrices</h3>
+
+            <pre>
+C11 = M1 + M4 - M5 + M7
+C12 = M3 + M5
+C21 = M2 + M4
+C22 = M1 - M2 + M3 + M6
+            </pre>
         </div>
 
-        <!-- C Code -->
         <div class="section">
-            <h2>💻 C Code</h2>
+            <h2>💻 C Program</h2>
 
-            <div class="code-box">#include &lt;stdio.h&gt;
+            <pre>
+#include &lt;stdio.h&gt;
 
 #define MAX 4
 
 // Add two matrices
-void addMatrix(int n, int A[MAX][MAX], int B[MAX][MAX], int C[MAX][MAX])
+void addMatrix(int A[MAX][MAX], int B[MAX][MAX],
+               int C[MAX][MAX], int n)
 {
     for (int i = 0; i &lt; n; i++)
     {
@@ -191,7 +192,8 @@ void addMatrix(int n, int A[MAX][MAX], int B[MAX][MAX], int C[MAX][MAX])
 }
 
 // Subtract two matrices
-void subtractMatrix(int n, int A[MAX][MAX], int B[MAX][MAX], int C[MAX][MAX])
+void subtractMatrix(int A[MAX][MAX], int B[MAX][MAX],
+                    int C[MAX][MAX], int n)
 {
     for (int i = 0; i &lt; n; i++)
     {
@@ -203,9 +205,9 @@ void subtractMatrix(int n, int A[MAX][MAX], int B[MAX][MAX], int C[MAX][MAX])
 }
 
 // Strassen Matrix Multiplication
-void strassen(int n, int A[MAX][MAX], int B[MAX][MAX], int C[MAX][MAX])
+void strassen(int A[MAX][MAX], int B[MAX][MAX],
+              int C[MAX][MAX], int n)
 {
-    // Base case: multiply two 1x1 matrices
     if (n == 1)
     {
         C[0][0] = A[0][0] * B[0][0];
@@ -224,23 +226,18 @@ void strassen(int n, int A[MAX][MAX], int B[MAX][MAX], int C[MAX][MAX])
     int B21[MAX][MAX] = {0};
     int B22[MAX][MAX] = {0};
 
-    int P1[MAX][MAX] = {0};
-    int P2[MAX][MAX] = {0};
-    int P3[MAX][MAX] = {0};
-    int P4[MAX][MAX] = {0};
-    int P5[MAX][MAX] = {0};
-    int P6[MAX][MAX] = {0};
-    int P7[MAX][MAX] = {0};
+    int M1[MAX][MAX] = {0};
+    int M2[MAX][MAX] = {0};
+    int M3[MAX][MAX] = {0};
+    int M4[MAX][MAX] = {0};
+    int M5[MAX][MAX] = {0};
+    int M6[MAX][MAX] = {0};
+    int M7[MAX][MAX] = {0};
 
-    int temp1[MAX][MAX] = {0};
-    int temp2[MAX][MAX] = {0};
+    int T1[MAX][MAX] = {0};
+    int T2[MAX][MAX] = {0};
 
-    int C11[MAX][MAX] = {0};
-    int C12[MAX][MAX] = {0};
-    int C21[MAX][MAX] = {0};
-    int C22[MAX][MAX] = {0};
-
-    // Divide matrix A into four quadrants
+    // Divide matrix A into four parts
     for (int i = 0; i &lt; k; i++)
     {
         for (int j = 0; j &lt; k; j++)
@@ -257,62 +254,82 @@ void strassen(int n, int A[MAX][MAX], int B[MAX][MAX], int C[MAX][MAX])
         }
     }
 
-    // P1 = A11 * (B12 - B22)
-    subtractMatrix(k, B12, B22, temp1);
-    strassen(k, A11, temp1, P1);
+    // M1 = (A11 + A22) * (B11 + B22)
+    addMatrix(A11, A22, T1, k);
+    addMatrix(B11, B22, T2, k);
+    strassen(T1, T2, M1, k);
 
-    // P2 = (A11 + A12) * B22
-    addMatrix(k, A11, A12, temp1);
-    strassen(k, temp1, B22, P2);
+    // M2 = (A21 + A22) * B11
+    addMatrix(A21, A22, T1, k);
+    strassen(T1, B11, M2, k);
 
-    // P3 = (A21 + A22) * B11
-    addMatrix(k, A21, A22, temp1);
-    strassen(k, temp1, B11, P3);
+    // M3 = A11 * (B12 - B22)
+    subtractMatrix(B12, B22, T2, k);
+    strassen(A11, T2, M3, k);
 
-    // P4 = A22 * (B21 - B11)
-    subtractMatrix(k, B21, B11, temp1);
-    strassen(k, A22, temp1, P4);
+    // M4 = A22 * (B21 - B11)
+    subtractMatrix(B21, B11, T2, k);
+    strassen(A22, T2, M4, k);
 
-    // P5 = (A11 + A22) * (B11 + B22)
-    addMatrix(k, A11, A22, temp1);
-    addMatrix(k, B11, B22, temp2);
-    strassen(k, temp1, temp2, P5);
+    // M5 = (A11 + A12) * B22
+    addMatrix(A11, A12, T1, k);
+    strassen(T1, B22, M5, k);
 
-    // P6 = (A12 - A22) * (B21 + B22)
-    subtractMatrix(k, A12, A22, temp1);
-    addMatrix(k, B21, B22, temp2);
-    strassen(k, temp1, temp2, P6);
+    // M6 = (A21 - A11) * (B11 + B12)
+    subtractMatrix(A21, A11, T1, k);
+    addMatrix(B11, B12, T2, k);
+    strassen(T1, T2, M6, k);
 
-    // P7 = (A11 - A21) * (B11 + B12)
-    subtractMatrix(k, A11, A21, temp1);
-    addMatrix(k, B11, B12, temp2);
-    strassen(k, temp1, temp2, P7);
+    // M7 = (A12 - A22) * (B21 + B22)
+    subtractMatrix(A12, A22, T1, k);
+    addMatrix(B21, B22, T2, k);
+    strassen(T1, T2, M7, k);
 
-    // C11 = P5 + P4 - P2 + P6
-    addMatrix(k, P5, P4, temp1);
-    subtractMatrix(k, temp1, P2, temp2);
-    addMatrix(k, temp2, P6, C11);
+    // Calculate C11 = M1 + M4 - M5 + M7
+    addMatrix(M1, M4, T1, k);
+    subtractMatrix(T1, M5, T2, k);
+    addMatrix(T2, M7, T1, k);
 
-    // C12 = P1 + P2
-    addMatrix(k, P1, P2, C12);
-
-    // C21 = P3 + P4
-    addMatrix(k, P3, P4, C21);
-
-    // C22 = P5 + P1 - P3 - P7
-    addMatrix(k, P5, P1, temp1);
-    subtractMatrix(k, temp1, P3, temp2);
-    subtractMatrix(k, temp2, P7, C22);
-
-    // Combine four quadrants into result matrix
     for (int i = 0; i &lt; k; i++)
     {
         for (int j = 0; j &lt; k; j++)
         {
-            C[i][j] = C11[i][j];
-            C[i][j + k] = C12[i][j];
-            C[i + k][j] = C21[i][j];
-            C[i + k][j + k] = C22[i][j];
+            C[i][j] = T1[i][j];
+        }
+    }
+
+    // Calculate C12 = M3 + M5
+    addMatrix(M3, M5, T1, k);
+
+    for (int i = 0; i &lt; k; i++)
+    {
+        for (int j = 0; j &lt; k; j++)
+        {
+            C[i][j + k] = T1[i][j];
+        }
+    }
+
+    // Calculate C21 = M2 + M4
+    addMatrix(M2, M4, T1, k);
+
+    for (int i = 0; i &lt; k; i++)
+    {
+        for (int j = 0; j &lt; k; j++)
+        {
+            C[i + k][j] = T1[i][j];
+        }
+    }
+
+    // Calculate C22 = M1 - M2 + M3 + M6
+    subtractMatrix(M1, M2, T1, k);
+    addMatrix(T1, M3, T2, k);
+    addMatrix(T2, M6, T1, k);
+
+    for (int i = 0; i &lt; k; i++)
+    {
+        for (int j = 0; j &lt; k; j++)
+        {
+            C[i + k][j + k] = T1[i][j];
         }
     }
 }
@@ -337,32 +354,10 @@ int main()
 
     int C[MAX][MAX] = {0};
 
-    // Perform matrix multiplication
-    strassen(MAX, A, B, C);
+    // Perform Strassen multiplication
+    strassen(A, B, C, MAX);
 
-    printf("Matrix A:\\n");
-
-    for (int i = 0; i &lt; MAX; i++)
-    {
-        for (int j = 0; j &lt; MAX; j++)
-        {
-            printf("%d\\t", A[i][j]);
-        }
-        printf("\\n");
-    }
-
-    printf("\\nMatrix B:\\n");
-
-    for (int i = 0; i &lt; MAX; i++)
-    {
-        for (int j = 0; j &lt; MAX; j++)
-        {
-            printf("%d\\t", B[i][j]);
-        }
-        printf("\\n");
-    }
-
-    printf("\\nResult Matrix using Strassen's Algorithm:\\n");
+    printf("Resultant Matrix:\\n");
 
     for (int i = 0; i &lt; MAX; i++)
     {
@@ -370,78 +365,75 @@ int main()
         {
             printf("%d\\t", C[i][j]);
         }
+
         printf("\\n");
     }
 
     return 0;
-}</div>
+}
+            </pre>
         </div>
 
-        <!-- Input -->
         <div class="section">
-            <h2>📥 Input Matrices</h2>
+            <h2>📥 Input Matrix A</h2>
 
-            <h3>Matrix A</h3>
-
-            <div class="output-box">1   2   3   4
-5   6   7   8
-9   10  11  12
-13  14  15  16</div>
-
-            <h3>Matrix B</h3>
-
-            <div class="output-box">16  15  14  13
-12  11  10  9
-8   7   6   5
-4   3   2   1</div>
+            <div class="matrix">
+                1 &nbsp; 2 &nbsp; 3 &nbsp; 4<br>
+                5 &nbsp; 6 &nbsp; 7 &nbsp; 8<br>
+                9 &nbsp; 10 &nbsp; 11 &nbsp; 12<br>
+                13 &nbsp; 14 &nbsp; 15 &nbsp; 16
+            </div>
         </div>
 
-        <!-- Output -->
         <div class="section">
+            <h2>📥 Input Matrix B</h2>
+
+            <div class="matrix">
+                16 &nbsp; 15 &nbsp; 14 &nbsp; 13<br>
+                12 &nbsp; 11 &nbsp; 10 &nbsp; 9<br>
+                8 &nbsp; 7 &nbsp; 6 &nbsp; 5<br>
+                4 &nbsp; 3 &nbsp; 2 &nbsp; 1
+            </div>
+        </div>
+
+        <div class="section output">
             <h2>📤 Output</h2>
 
-            <div class="output-box">Result Matrix using Strassen's Algorithm:
+            <pre>
+Resultant Matrix:
 
 80    70    60    50
 240   214   188   162
 400   358   316   274
-560   502   444   386</div>
+560   502   444   386
+            </pre>
         </div>
 
-        <!-- Complexity -->
-        <div class="section">
+        <div class="section complexity">
             <h2>⏱️ Time and Space Complexity</h2>
 
-            <div class="complexity">
-                <p><b>Time Complexity:</b> O(n^log₂7) ≈ O(n^2.807)</p>
-
-                <p>
-                    Strassen's algorithm performs 7 recursive matrix
-                    multiplications instead of 8.
-                </p>
-
-                <p><b>Space Complexity:</b> O(n²)</p>
-            </div>
-        </div>
-
-        <!-- Conclusion -->
-        <div class="section">
-            <h2>📝 Conclusion</h2>
+            <p>
+                <b>Time Complexity:</b> O(n<sup>log₂7</sup>) ≈ O(n<sup>2.807</sup>)
+            </p>
 
             <p>
-                Strassen's Divide and Conquer algorithm was successfully
-                implemented for 4×4 matrix multiplication. The matrices were
-                divided into smaller quadrants and multiplied recursively.
-                The final result matrix was obtained correctly.
+                <b>Space Complexity:</b> O(n²)
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>✅ Conclusion</h2>
+
+            <p>
+                Strassen’s Divide and Conquer algorithm successfully multiplies
+                two 4 × 4 matrices. It reduces the number of recursive
+                multiplications from eight to seven and provides better
+                asymptotic performance than the traditional matrix
+                multiplication method for sufficiently large matrices.
             </p>
         </div>
 
     </div>
 
-    <footer>
-        DAA Practical 3 | Session 2026-27
-    </footer>
-
 </body>
-
 </html>
