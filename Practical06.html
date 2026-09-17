@@ -1,1 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>DAA Practical 6</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #1f2937;
+        }
+
+        .header {
+            background: #172554;
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 30px;
+        }
+
+        .header p {
+            margin-top: 8px;
+            font-size: 16px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 18px;
+            background: #172554;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+
+        .back-btn:hover {
+            background: #1e3a8a;
+        }
+
+        .section {
+            background: white;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .section h2 {
+            color: #172554;
+            margin-top: 0;
+        }
+
+        pre {
+            background: #111827;
+            color: #f9fafb;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            line-height: 1.5;
+        }
+
+        .output {
+            background: #ecfdf5;
+            color: #065f46;
+            border-left: 5px solid #10b981;
+        }
+
+        .complexity {
+            background: #eff6ff;
+            border-left: 5px solid #2563eb;
+        }
+
+        ul,
+        ol {
+            line-height: 1.8;
+        }
+
+        .matrix {
+            font-family: monospace;
+            background: #f3f4f6;
+            padding: 18px;
+            border-radius: 8px;
+            display: inline-block;
+            line-height: 1.8;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>📘 DAA Practical 6</h1>
+        <p>Design and Analysis of Algorithms — Session 2026-27</p>
+    </div>
+
+    <div class="container">
+
+        <a href="index.html" class="back-btn">← Back to Dashboard</a>
+
+        <div class="section">
+            <h2>🎯 Problem Statement</h2>
+
+            <p>
+                A logistics company in Bengaluru deploys autonomous drones
+                to deliver medical supplies across multiple Indian cities.
+            </p>
+
+            <p>
+                Each drone must start from the headquarters (HQ). It must
+                visit every city exactly once and finally return to HQ while
+                minimizing the total travel cost such as fuel, distance, or
+                time.
+            </p>
+
+            <p>
+                This problem is known as the
+                <b>Travelling Salesman Problem (TSP)</b>.
+                Use <b>Dynamic Programming</b> to compute the minimum travel
+                cost.
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>📋 Algorithm</h2>
+
+            <ol>
+                <li>Represent HQ and all cities as vertices.</li>
+                <li>Store the travel cost between every pair of cities.</li>
+                <li>Start the drone from HQ.</li>
+                <li>Use a bitmask to keep track of visited cities.</li>
+                <li>Use Dynamic Programming to store the minimum cost for each state.</li>
+                <li>Try visiting every unvisited city.</li>
+                <li>After visiting all cities, add the cost of returning to HQ.</li>
+                <li>Find and display the minimum possible travel cost.</li>
+            </ol>
+        </div>
+
+        <div class="section">
+            <h2>🗺️ Example Travel Cost Matrix</h2>
+
+            <p>
+                The following matrix represents the travel cost between HQ
+                and four cities.
+            </p>
+
+            <div class="matrix">
+                &nbsp;&nbsp;&nbsp;&nbsp;HQ &nbsp; A &nbsp; B &nbsp; C &nbsp; D<br>
+                HQ &nbsp; 0 &nbsp; 10 &nbsp; 15 &nbsp; 20 &nbsp; 10<br>
+                A &nbsp; 10 &nbsp; 0 &nbsp; 35 &nbsp; 25 &nbsp; 17<br>
+                B &nbsp; 15 &nbsp; 35 &nbsp; 0 &nbsp; 30 &nbsp; 28<br>
+                C &nbsp; 20 &nbsp; 25 &nbsp; 30 &nbsp; 0 &nbsp; 16<br>
+                D &nbsp; 10 &nbsp; 17 &nbsp; 28 &nbsp; 16 &nbsp; 0
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>💻 C Program</h2>
+
+            <pre>
+#include &lt;stdio.h&gt;
+
+#define N 5
+#define INF 999999
+
+// Return the minimum of two values
+int min(int a, int b)
+{
+    return (a &lt; b) ? a : b;
+}
+
+// TSP using Dynamic Programming and Bitmasking
+int tsp(int graph[N][N], int mask, int pos,
+        int dp[1 &lt;&lt; N][N])
+{
+    // All cities have been visited
+    if (mask == (1 &lt;&lt; N) - 1)
+    {
+        return graph[pos][0];
+    }
+
+    // Return already calculated result
+    if (dp[mask][pos] != -1)
+    {
+        return dp[mask][pos];
+    }
+
+    int answer = INF;
+
+    // Try visiting every unvisited city
+    for (int city = 0; city &lt; N; city++)
+    {
+        if ((mask &amp; (1 &lt;&lt; city)) == 0)
+        {
+            int newCost = graph[pos][city]
+                        + tsp(graph,
+                              mask | (1 &lt;&lt; city),
+                              city,
+                              dp);
+
+            answer = min(answer, newCost);
+        }
+    }
+
+    dp[mask][pos] = answer;
+
+    return answer;
+}
+
+int main()
+{
+    /*
+       Cities:
+       0 = HQ
+       1 = A
+       2 = B
+       3 = C
+       4 = D
+    */
+
+    int graph[N][N] =
+    {
+        {0, 10, 15, 20, 10},
+        {10, 0, 35, 25, 17},
+        {15, 35, 0, 30, 28},
+        {20, 25, 30, 0, 16},
+        {10, 17, 28, 16, 0}
+    };
+
+    // DP table
+    int dp[1 &lt;&lt; N][N];
+
+    // Initialize DP table
+    for (int i = 0; i &lt; (1 &lt;&lt; N); i++)
+    {
+        for (int j = 0; j &lt; N; j++)
+        {
+            dp[i][j] = -1;
+        }
+    }
+
+    // Start from HQ
+    int start = 0;
+
+    // Only HQ is visited initially
+    int mask = 1 &lt;&lt; start;
+
+    // Calculate minimum travel cost
+    int result = tsp(graph, mask, start, dp);
+
+    printf("Minimum Travel Cost = %d\n", result);
+
+    return 0;
+}
+            </pre>
+        </div>
+
+        <div class="section">
+            <h2>📌 Sample Route</h2>
+
+            <pre>
+HQ → A → D → C → B → HQ
+            </pre>
+
+            <p>
+                Total travel cost:
+            </p>
+
+            <pre>
+HQ → A = 10
+A → D  = 17
+D → C  = 16
+C → B  = 30
+B → HQ = 15
+
+Total = 88
+            </pre>
+        </div>
+
+        <div class="section output">
+            <h2>📤 Output</h2>
+
+            <pre>
+Minimum Travel Cost = 88
+            </pre>
+        </div>
+
+        <div class="section">
+            <h2>🔍 Result</h2>
+
+            <p>
+                The Dynamic Programming based TSP algorithm calculates the
+                minimum travel cost for the drone to start from HQ, visit
+                every city exactly once, and return to HQ.
+            </p>
+        </div>
+
+        <div class="section complexity">
+            <h2>⏱️ Time and Space Complexity</h2>
+
+            <p>
+                <b>Time Complexity:</b> O(n² × 2ⁿ)
+            </p>
+
+            <p>
+                <b>Space Complexity:</b> O(n × 2ⁿ)
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>✅ Conclusion</h2>
+
+            <p>
+                The Travelling Salesman Problem is solved using Dynamic
+                Programming and bitmasking. The algorithm efficiently finds
+                the minimum travel cost while ensuring that every city is
+                visited exactly once and the drone returns to the
+                headquarters.
+            </p>
+        </div>
+
+    </div>
+
+</body>
+</html>
