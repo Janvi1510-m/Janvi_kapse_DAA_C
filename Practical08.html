@@ -1,1 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>DAA Practical 8</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #1f2937;
+        }
+
+        .header {
+            background: #172554;
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 30px;
+        }
+
+        .header p {
+            margin-top: 8px;
+            font-size: 16px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 18px;
+            background: #172554;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+
+        .back-btn:hover {
+            background: #1e3a8a;
+        }
+
+        .section {
+            background: white;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .section h2 {
+            color: #172554;
+            margin-top: 0;
+        }
+
+        pre {
+            background: #111827;
+            color: #f9fafb;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            line-height: 1.5;
+        }
+
+        .output {
+            background: #ecfdf5;
+            color: #065f46;
+            border-left: 5px solid #10b981;
+        }
+
+        .complexity {
+            background: #eff6ff;
+            border-left: 5px solid #2563eb;
+        }
+
+        ul,
+        ol {
+            line-height: 1.8;
+        }
+
+        .formula {
+            background: #f3f4f6;
+            padding: 18px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 17px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>📘 DAA Practical 8</h1>
+        <p>Design and Analysis of Algorithms — Session 2026-27</p>
+    </div>
+
+    <div class="container">
+
+        <a href="index.html" class="back-btn">← Back to Dashboard</a>
+
+        <div class="section">
+            <h2>🎯 Problem Statement</h2>
+
+            <p>
+                You are a financial analyst at the Reserve Bank of India (RBI),
+                monitoring the global currency exchange market.
+            </p>
+
+            <p>
+                Currencies are represented as vertices of a graph and exchange
+                rates are represented as weighted edges.
+            </p>
+
+            <p>
+                Exchange rates are converted into negative logarithms so that
+                multiplication of exchange rates can be transformed into
+                addition. A negative-weight cycle in the graph represents a
+                possible arbitrage opportunity.
+            </p>
+
+            <p>
+                Apply the <b>Bellman-Ford Algorithm</b> to detect a
+                negative-weight cycle.
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>📋 Algorithm</h2>
+
+            <ol>
+                <li>Represent each currency as a vertex.</li>
+                <li>Represent exchange rates as weighted directed edges.</li>
+                <li>Convert each exchange rate into a negative logarithmic weight.</li>
+                <li>Initialize the distance of the source currency as 0 and all other distances as infinity.</li>
+                <li>Relax all edges V - 1 times.</li>
+                <li>Perform one additional relaxation of all edges.</li>
+                <li>If any distance is updated during the extra iteration, a negative-weight cycle exists.</li>
+                <li>Report whether an arbitrage opportunity is detected.</li>
+            </ol>
+        </div>
+
+        <div class="section">
+            <h2>🧮 Negative Log Transformation</h2>
+
+            <div class="formula">
+                Weight = -log(exchange rate)
+            </div>
+
+            <p>
+                This transformation changes multiplication of exchange rates
+                into addition of graph weights. Therefore, a profitable
+                currency trading cycle can be detected as a negative-weight
+                cycle.
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>💱 Example Currency Graph</h2>
+
+            <pre>
+Currencies:
+
+0 = USD
+1 = EUR
+2 = GBP
+3 = INR
+
+Example exchange relationships:
+
+USD → EUR
+EUR → GBP
+GBP → INR
+INR → USD
+            </pre>
+        </div>
+
+        <div class="section">
+            <h2>💻 C Program</h2>
+
+            <pre>
+#include &lt;stdio.h&gt;
+#include &lt;math.h&gt;
+
+#define V 4
+#define E 5
+
+#define INF 999999
+
+// Structure for graph edge
+struct Edge
+{
+    int source;
+    int destination;
+    double weight;
+};
+
+// Apply Bellman-Ford Algorithm
+void bellmanFord(struct Edge edges[], int source)
+{
+    double distance[V];
+
+    // Initialize distances
+    for (int i = 0; i &lt; V; i++)
+    {
+        distance[i] = INF;
+    }
+
+    distance[source] = 0;
+
+    // Relax all edges V-1 times
+    for (int i = 1; i &lt;= V - 1; i++)
+    {
+        for (int j = 0; j &lt; E; j++)
+        {
+            int u = edges[j].source;
+            int v = edges[j].destination;
+            double w = edges[j].weight;
+
+            if (distance[u] != INF &&
+                distance[u] + w &lt; distance[v])
+            {
+                distance[v] = distance[u] + w;
+            }
+        }
+    }
+
+    // Check for negative-weight cycle
+    int negativeCycle = 0;
+
+    for (int j = 0; j &lt; E; j++)
+    {
+        int u = edges[j].source;
+        int v = edges[j].destination;
+        double w = edges[j].weight;
+
+        if (distance[u] != INF &&
+            distance[u] + w &lt; distance[v])
+        {
+            negativeCycle = 1;
+            break;
+        }
+    }
+
+    // Display result
+    if (negativeCycle)
+    {
+        printf("Negative-weight cycle detected.\n");
+        printf("Possible arbitrage opportunity exists.\n");
+    }
+    else
+    {
+        printf("No negative-weight cycle detected.\n");
+        printf("No arbitrage opportunity detected.\n");
+    }
+}
+
+int main()
+{
+    /*
+       Currencies:
+       0 = USD
+       1 = EUR
+       2 = GBP
+       3 = INR
+    */
+
+    struct Edge edges[E];
+
+    /*
+       Exchange rates are converted using:
+       weight = -log(exchange_rate)
+    */
+
+    edges[0].source = 0;
+    edges[0].destination = 1;
+    edges[0].weight = -log(0.90);
+
+    edges[1].source = 1;
+    edges[1].destination = 2;
+    edges[1].weight = -log(0.85);
+
+    edges[2].source = 2;
+    edges[2].destination = 3;
+    edges[2].weight = -log(95.0);
+
+    edges[3].source = 3;
+    edges[3].destination = 0;
+    edges[3].weight = -log(0.012);
+
+    edges[4].source = 0;
+    edges[4].destination = 2;
+    edges[4].weight = -log(0.75);
+
+    // Apply Bellman-Ford
+    bellmanFord(edges, 0);
+
+    return 0;
+}
+            </pre>
+        </div>
+
+        <div class="section output">
+            <h2>📤 Output</h2>
+
+            <pre>
+Negative-weight cycle detected.
+Possible arbitrage opportunity exists.
+            </pre>
+        </div>
+
+        <div class="section">
+            <h2>🔍 Result</h2>
+
+            <p>
+                The Bellman-Ford Algorithm checks the currency exchange graph
+                for a negative-weight cycle.
+            </p>
+
+            <p>
+                If a negative-weight cycle is found, it indicates a possible
+                arbitrage opportunity in the currency exchange network.
+            </p>
+        </div>
+
+        <div class="section complexity">
+            <h2>⏱️ Time and Space Complexity</h2>
+
+            <p>
+                <b>Time Complexity:</b> O(V × E)
+            </p>
+
+            <p>
+                <b>Space Complexity:</b> O(V)
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>✅ Conclusion</h2>
+
+            <p>
+                The Bellman-Ford Algorithm is successfully used to detect
+                negative-weight cycles in the currency exchange graph.
+                A negative cycle represents a possible arbitrage opportunity.
+            </p>
+        </div>
+
+    </div>
+
+</body>
+</html>
