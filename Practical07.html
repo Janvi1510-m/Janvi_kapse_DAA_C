@@ -1,1 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>DAA Practical 7</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #1f2937;
+        }
+
+        .header {
+            background: #172554;
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 30px;
+        }
+
+        .header p {
+            margin-top: 8px;
+            font-size: 16px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 18px;
+            background: #172554;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+
+        .back-btn:hover {
+            background: #1e3a8a;
+        }
+
+        .section {
+            background: white;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .section h2 {
+            color: #172554;
+            margin-top: 0;
+        }
+
+        pre {
+            background: #111827;
+            color: #f9fafb;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            line-height: 1.5;
+        }
+
+        .output {
+            background: #ecfdf5;
+            color: #065f46;
+            border-left: 5px solid #10b981;
+        }
+
+        .complexity {
+            background: #eff6ff;
+            border-left: 5px solid #2563eb;
+        }
+
+        ul,
+        ol {
+            line-height: 1.8;
+        }
+
+        .sequence {
+            background: #f3f4f6;
+            padding: 18px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 18px;
+        }
+
+        table {
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th,
+        td {
+            border: 1px solid #9ca3af;
+            padding: 10px 15px;
+            text-align: center;
+        }
+
+        th {
+            background: #dbeafe;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>📘 DAA Practical 7</h1>
+        <p>Design and Analysis of Algorithms — Session 2026-27</p>
+    </div>
+
+    <div class="container">
+
+        <a href="index.html" class="back-btn">← Back to Dashboard</a>
+
+        <div class="section">
+            <h2>🎯 Problem Statement</h2>
+
+            <p>
+                You are a bioinformatics scientist at the Indian Institute
+                of Science (IISc), Bengaluru, working in a genetic research
+                laboratory.
+            </p>
+
+            <p>
+                Scientists are comparing DNA samples from two species found
+                in the Western Ghats to identify common evolutionary patterns.
+            </p>
+
+            <p>
+                Your task is to determine the length of the
+                <b>Longest Common Subsequence (LCS)</b> between two DNA
+                sequences. The LCS helps identify common genetic patterns
+                between the sequences.
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>📋 Algorithm</h2>
+
+            <ol>
+                <li>Take two DNA sequences as input.</li>
+                <li>Create a Dynamic Programming table.</li>
+                <li>Initialize the first row and first column with zero.</li>
+                <li>Compare characters of both sequences.</li>
+                <li>If the characters match, add 1 to the diagonal value.</li>
+                <li>If the characters do not match, take the maximum of the upper and left values.</li>
+                <li>Continue until the complete DP table is filled.</li>
+                <li>The last cell of the table contains the LCS length.</li>
+            </ol>
+        </div>
+
+        <div class="section">
+            <h2>🧬 Input DNA Sequences</h2>
+
+            <div class="sequence">
+                DNA Sequence 1: AGGTAB
+                <br><br>
+                DNA Sequence 2: GXTXAYB
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>💻 C Program</h2>
+
+            <pre>
+#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+// Find maximum of two numbers
+int max(int a, int b)
+{
+    return (a &gt; b) ? a : b;
+}
+
+// Find LCS length using Dynamic Programming
+int LCS(char X[], char Y[])
+{
+    int m = strlen(X);
+    int n = strlen(Y);
+
+    int dp[m + 1][n + 1];
+
+    // Initialize first row and first column
+    for (int i = 0; i &lt;= m; i++)
+    {
+        for (int j = 0; j &lt;= n; j++)
+        {
+            if (i == 0 || j == 0)
+            {
+                dp[i][j] = 0;
+            }
+        }
+    }
+
+    // Fill the DP table
+    for (int i = 1; i &lt;= m; i++)
+    {
+        for (int j = 1; j &lt;= n; j++)
+        {
+            // If characters are equal
+            if (X[i - 1] == Y[j - 1])
+            {
+                dp[i][j] = dp[i - 1][j - 1] + 1;
+            }
+            else
+            {
+                // Take maximum of upper and left value
+                dp[i][j] = max(dp[i - 1][j],
+                               dp[i][j - 1]);
+            }
+        }
+    }
+
+    return dp[m][n];
+}
+
+int main()
+{
+    char X[] = "AGGTAB";
+    char Y[] = "GXTXAYB";
+
+    // Calculate LCS length
+    int result = LCS(X, Y);
+
+    printf("DNA Sequence 1: %s\n", X);
+    printf("DNA Sequence 2: %s\n", Y);
+
+    printf("\nLength of Longest Common Subsequence = %d\n",
+           result);
+
+    return 0;
+}
+            </pre>
+        </div>
+
+        <div class="section">
+            <h2>📊 Dynamic Programming Table</h2>
+
+            <table>
+                <tr>
+                    <th></th>
+                    <th>G</th>
+                    <th>X</th>
+                    <th>T</th>
+                    <th>X</th>
+                    <th>A</th>
+                    <th>Y</th>
+                    <th>B</th>
+                </tr>
+
+                <tr>
+                    <th></th>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                </tr>
+
+                <tr>
+                    <th>A</th>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                </tr>
+
+                <tr>
+                    <th>G</th>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                </tr>
+
+                <tr>
+                    <th>G</th>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                </tr>
+
+                <tr>
+                    <th>T</th>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>2</td>
+                    <td>2</td>
+                    <td>2</td>
+                    <td>2</td>
+                </tr>
+
+                <tr>
+                    <th>A</th>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>2</td>
+                    <td>3</td>
+                    <td>3</td>
+                    <td>3</td>
+                </tr>
+
+                <tr>
+                    <th>B</th>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>2</td>
+                    <td>3</td>
+                    <td>3</td>
+                    <td>4</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="section output">
+            <h2>📤 Output</h2>
+
+            <pre>
+DNA Sequence 1: AGGTAB
+DNA Sequence 2: GXTXAYB
+
+Length of Longest Common Subsequence = 4
+            </pre>
+        </div>
+
+        <div class="section">
+            <h2>🔍 Result</h2>
+
+            <p>
+                The Longest Common Subsequence between the two DNA sequences
+                has length <b>4</b>.
+            </p>
+
+            <p>
+                One LCS is:
+                <b>GTAB</b>
+            </p>
+        </div>
+
+        <div class="section complexity">
+            <h2>⏱️ Time and Space Complexity</h2>
+
+            <p>
+                <b>Time Complexity:</b> O(m × n)
+            </p>
+
+            <p>
+                <b>Space Complexity:</b> O(m × n)
+            </p>
+
+            <p>
+                Where <b>m</b> and <b>n</b> are the lengths of the two
+                DNA sequences.
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>✅ Conclusion</h2>
+
+            <p>
+                The Longest Common Subsequence problem is successfully solved
+                using Dynamic Programming. The algorithm finds the length of
+                the longest sequence that occurs in both DNA samples while
+                preserving the order of characters.
+            </p>
+        </div>
+
+    </div>
+
+</body>
+</html>
