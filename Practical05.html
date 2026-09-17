@@ -1,1 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>DAA Practical 5</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #1f2937;
+        }
+
+        .header {
+            background: #172554;
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 30px;
+        }
+
+        .header p {
+            margin-top: 8px;
+            font-size: 16px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 18px;
+            background: #172554;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+
+        .back-btn:hover {
+            background: #1e3a8a;
+        }
+
+        .section {
+            background: white;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .section h2 {
+            color: #172554;
+            margin-top: 0;
+        }
+
+        pre {
+            background: #111827;
+            color: #f9fafb;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            line-height: 1.5;
+        }
+
+        .output {
+            background: #ecfdf5;
+            color: #065f46;
+            border-left: 5px solid #10b981;
+        }
+
+        .complexity {
+            background: #eff6ff;
+            border-left: 5px solid #2563eb;
+        }
+
+        ul,
+        ol {
+            line-height: 1.8;
+        }
+
+        .graph {
+            background: #f3f4f6;
+            padding: 18px;
+            border-radius: 8px;
+            line-height: 1.8;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>📘 DAA Practical 5</h1>
+        <p>Design and Analysis of Algorithms — Session 2026-27</p>
+    </div>
+
+    <div class="container">
+
+        <a href="index.html" class="back-btn">← Back to Dashboard</a>
+
+        <div class="section">
+            <h2>🎯 Problem Statement</h2>
+
+            <p>
+                You are developing a real-time emergency ambulance routing
+                system for Mumbai, one of India’s busiest metropolitan cities.
+            </p>
+
+            <p>
+                Road intersections are represented as graph vertices.
+                Roads are represented as weighted edges, where the weight
+                indicates travel time affected by traffic density, road
+                conditions, etc.
+            </p>
+
+            <p>
+                When an emergency occurs, the system must compute the shortest
+                travel time from the hospital to all locations in the city so
+                that ambulances can reach patients as quickly as possible.
+                Implement <b>Dijkstra’s Algorithm</b> to solve this problem.
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>📋 Algorithm</h2>
+
+            <ol>
+                <li>Represent the city as a weighted graph.</li>
+                <li>Choose the hospital as the source vertex.</li>
+                <li>Initialize the distance of the source as 0 and all other distances as infinity.</li>
+                <li>Mark all vertices as unvisited.</li>
+                <li>Select the unvisited vertex with the smallest distance.</li>
+                <li>Update the distance of its adjacent vertices if a shorter path is found.</li>
+                <li>Mark the selected vertex as visited.</li>
+                <li>Repeat the process until all vertices are visited.</li>
+                <li>Display the shortest travel time from the hospital to every location.</li>
+            </ol>
+        </div>
+
+        <div class="section">
+            <h2>🗺️ Example Graph</h2>
+
+            <div class="graph">
+                <b>Locations:</b> Hospital (H), A, B, C, D, E
+                <br><br>
+
+                <b>Road Travel Times:</b>
+                <br>
+                H → A = 4
+                <br>
+                H → B = 2
+                <br>
+                A → B = 1
+                <br>
+                A → C = 5
+                <br>
+                B → C = 8
+                <br>
+                B → D = 10
+                <br>
+                C → D = 2
+                <br>
+                C → E = 6
+                <br>
+                D → E = 3
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>💻 C Program</h2>
+
+            <pre>
+#include &lt;stdio.h&gt;
+
+#define V 6
+#define INF 9999
+
+// Find the vertex with minimum distance
+int minDistance(int dist[], int visited[])
+{
+    int min = INF;
+    int minIndex = -1;
+
+    for (int i = 0; i &lt; V; i++)
+    {
+        if (!visited[i] &amp;&amp; dist[i] &lt; min)
+        {
+            min = dist[i];
+            minIndex = i;
+        }
+    }
+
+    return minIndex;
+}
+
+// Print shortest distances
+void printDistances(int dist[])
+{
+    char locations[V] = {'H', 'A', 'B', 'C', 'D', 'E'};
+
+    printf("Shortest travel time from Hospital (H):\n\n");
+
+    for (int i = 0; i &lt; V; i++)
+    {
+        printf("Hospital to %c = %d minutes\n",
+               locations[i], dist[i]);
+    }
+}
+
+// Dijkstra's Algorithm
+void dijkstra(int graph[V][V], int source)
+{
+    int dist[V];
+    int visited[V];
+
+    // Initialize distances and visited array
+    for (int i = 0; i &lt; V; i++)
+    {
+        dist[i] = INF;
+        visited[i] = 0;
+    }
+
+    // Distance from source to itself is zero
+    dist[source] = 0;
+
+    // Find shortest paths
+    for (int count = 0; count &lt; V - 1; count++)
+    {
+        int u = minDistance(dist, visited);
+
+        if (u == -1)
+        {
+            break;
+        }
+
+        visited[u] = 1;
+
+        // Update adjacent vertices
+        for (int v = 0; v &lt; V; v++)
+        {
+            if (!visited[v] &amp;&amp;
+                graph[u][v] != 0 &amp;&amp;
+                dist[u] != INF &amp;&amp;
+                dist[u] + graph[u][v] &lt; dist[v])
+            {
+                dist[v] = dist[u] + graph[u][v];
+            }
+        }
+    }
+
+    printDistances(dist);
+}
+
+int main()
+{
+    /*
+       Vertices:
+       0 = Hospital (H)
+       1 = A
+       2 = B
+       3 = C
+       4 = D
+       5 = E
+    */
+
+    int graph[V][V] =
+    {
+        {0, 4, 2, 0, 0, 0},
+        {4, 0, 1, 5, 0, 0},
+        {2, 1, 0, 8, 10, 0},
+        {0, 5, 8, 0, 2, 6},
+        {0, 0, 10, 2, 0, 3},
+        {0, 0, 0, 6, 3, 0}
+    };
+
+    // Hospital is the source vertex
+    int source = 0;
+
+    // Apply Dijkstra's Algorithm
+    dijkstra(graph, source);
+
+    return 0;
+}
+            </pre>
+        </div>
+
+        <div class="section output">
+            <h2>📤 Output</h2>
+
+            <pre>
+Shortest travel time from Hospital (H):
+
+Hospital to H = 0 minutes
+Hospital to A = 3 minutes
+Hospital to B = 2 minutes
+Hospital to C = 8 minutes
+Hospital to D = 10 minutes
+Hospital to E = 13 minutes
+            </pre>
+        </div>
+
+        <div class="section">
+            <h2>🔍 Result</h2>
+
+            <p>
+                The Dijkstra algorithm successfully finds the shortest travel
+                time from the hospital to all other locations in the city.
+            </p>
+
+            <p>
+                For example, the shortest route from Hospital to A is:
+                <b>H → B → A</b>, with a total travel time of
+                <b>3 minutes</b>.
+            </p>
+        </div>
+
+        <div class="section complexity">
+            <h2>⏱️ Time and Space Complexity</h2>
+
+            <p>
+                <b>Time Complexity:</b> O(V²)
+            </p>
+
+            <p>
+                <b>Space Complexity:</b> O(V²)
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>✅ Conclusion</h2>
+
+            <p>
+                Dijkstra’s Algorithm efficiently determines the shortest
+                travel time from the hospital to all locations in the
+                weighted road network. It can help an emergency ambulance
+                routing system identify faster routes for reaching patients.
+            </p>
+        </div>
+
+    </div>
+
+</body>
+</html>
