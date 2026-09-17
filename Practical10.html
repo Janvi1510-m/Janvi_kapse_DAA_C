@@ -1,1 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>DAA Practical 10</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #1f2937;
+        }
+
+        .header {
+            background: #172554;
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 30px;
+        }
+
+        .header p {
+            margin-top: 8px;
+            font-size: 16px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 18px;
+            background: #172554;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+
+        .back-btn:hover {
+            background: #1e3a8a;
+        }
+
+        .section {
+            background: white;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .section h2 {
+            color: #172554;
+            margin-top: 0;
+        }
+
+        pre {
+            background: #111827;
+            color: #f9fafb;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            line-height: 1.5;
+        }
+
+        .output {
+            background: #ecfdf5;
+            color: #065f46;
+            border-left: 5px solid #10b981;
+        }
+
+        .complexity {
+            background: #eff6ff;
+            border-left: 5px solid #2563eb;
+        }
+
+        ul,
+        ol {
+            line-height: 1.8;
+        }
+
+        .graph {
+            background: #f3f4f6;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: monospace;
+            text-align: center;
+            line-height: 2;
+        }
+
+        .formula {
+            background: #f3f4f6;
+            padding: 18px;
+            border-radius: 8px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>📘 DAA Practical 10</h1>
+        <p>Design and Analysis of Algorithms — Session 2026-27</p>
+    </div>
+
+    <div class="container">
+
+        <a href="index.html" class="back-btn">← Back to Dashboard</a>
+
+        <div class="section">
+            <h2>🎯 Problem Statement</h2>
+
+            <p>
+                A social media platform in Bengaluru models its users as a
+                directed graph, where each node represents a user and each
+                directed edge represents a following relationship.
+            </p>
+
+            <p>
+                Given a starting user, perform a
+                <b>Depth First Search (DFS)</b> to explore the chain of
+                following relationships before backtracking.
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>📋 Algorithm</h2>
+
+            <ol>
+                <li>Start from the given user.</li>
+                <li>Mark the current user as visited.</li>
+                <li>Display the current user.</li>
+                <li>Check all users followed by the current user.</li>
+                <li>If an unvisited user is found, recursively perform DFS.</li>
+                <li>Continue exploring until no unvisited user is available.</li>
+                <li>Backtrack to the previous user.</li>
+                <li>Repeat until all reachable users are visited.</li>
+            </ol>
+        </div>
+
+        <div class="section">
+            <h2>🔗 Example Directed Graph</h2>
+
+            <div class="graph">
+                User 0 → User 1 → User 3<br>
+                ↓<br>
+                User 2 → User 4
+            </div>
+
+            <p>
+                Here, an arrow represents a following relationship.
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>💻 C Program</h2>
+
+            <pre>
+#include &lt;stdio.h&gt;
+
+#define V 5
+
+// Perform Depth First Search
+void DFS(int graph[V][V], int vertex, int visited[V])
+{
+    // Mark current user as visited
+    visited[vertex] = 1;
+
+    // Display current user
+    printf("User %d ", vertex);
+
+    // Visit all connected users
+    for (int i = 0; i &lt; V; i++)
+    {
+        if (graph[vertex][i] == 1 &amp;&amp; visited[i] == 0)
+        {
+            DFS(graph, i, visited);
+        }
+    }
+}
+
+int main()
+{
+    // Directed graph representing following relationships
+    int graph[V][V] =
+    {
+        {0, 1, 1, 0, 0},
+        {0, 0, 0, 1, 0},
+        {0, 0, 0, 0, 1},
+        {0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0}
+    };
+
+    // Array to keep track of visited users
+    int visited[V] = {0};
+
+    // Starting user
+    int start = 0;
+
+    printf("DFS Traversal starting from User %d:\n", start);
+
+    // Perform DFS
+    DFS(graph, start, visited);
+
+    printf("\n");
+
+    return 0;
+}
+            </pre>
+        </div>
+
+        <div class="section">
+            <h2>📥 Input</h2>
+
+            <p>
+                The directed graph is represented using an adjacency matrix.
+            </p>
+
+            <pre>
+Number of Users = 5
+
+Adjacency Matrix:
+
+0 1 1 0 0
+0 0 0 1 0
+0 0 0 0 1
+0 0 0 0 0
+0 0 0 0 0
+
+Starting User = 0
+            </pre>
+        </div>
+
+        <div class="section output">
+            <h2>📤 Output</h2>
+
+            <pre>
+DFS Traversal starting from User 0:
+User 0 User 1 User 3 User 2 User 4
+            </pre>
+        </div>
+
+        <div class="section">
+            <h2>🔍 DFS Traversal Explanation</h2>
+
+            <ol>
+                <li>DFS starts from User 0.</li>
+                <li>User 0 follows User 1.</li>
+                <li>User 1 follows User 3.</li>
+                <li>User 3 has no unvisited following connection, so DFS backtracks.</li>
+                <li>DFS returns to User 0 and visits User 2.</li>
+                <li>User 2 follows User 4.</li>
+                <li>User 4 has no further connection.</li>
+            </ol>
+        </div>
+
+        <div class="section">
+            <h2>🔄 Result</h2>
+
+            <p>
+                The DFS algorithm successfully explores the reachable users
+                from the starting user by following one chain deeply before
+                backtracking to explore other available connections.
+            </p>
+        </div>
+
+        <div class="section complexity">
+            <h2>⏱️ Time and Space Complexity</h2>
+
+            <p>
+                <b>Time Complexity:</b> O(V²)
+            </p>
+
+            <p>
+                <b>Space Complexity:</b> O(V)
+            </p>
+
+            <p>
+                Here, <b>V</b> represents the number of users (vertices).
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>✅ Conclusion</h2>
+
+            <p>
+                DFS is used to traverse the directed social media graph.
+                It explores a following chain deeply before backtracking.
+                This makes DFS useful for exploring connected users and
+                following relationships in a social network.
+            </p>
+        </div>
+
+    </div>
+
+</body>
+
+</html>
