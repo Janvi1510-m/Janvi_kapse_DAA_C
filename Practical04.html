@@ -1,1 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>DAA Practical 4</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #1f2937;
+        }
+
+        .header {
+            background: #172554;
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 32px;
+        }
+
+        .header p {
+            margin: 10px 0 0;
+            font-size: 17px;
+            color: #dbeafe;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 30px auto;
+        }
+
+        .back-btn {
+            display: inline-block;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            padding: 10px 18px;
+            border-radius: 6px;
+            margin-bottom: 25px;
+        }
+
+        .back-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .section {
+            background: white;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .section h2 {
+            color: #172554;
+            margin-top: 0;
+        }
+
+        .section h3 {
+            color: #1e40af;
+        }
+
+        .section li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .code-box {
+            background: #111827;
+            color: #f9fafb;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: Consolas, monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            white-space: pre;
+        }
+
+        .output-box {
+            background: #ecfdf5;
+            border-left: 5px solid #10b981;
+            padding: 15px 20px;
+            border-radius: 6px;
+            font-family: Consolas, monospace;
+            white-space: pre-wrap;
+            line-height: 1.6;
+        }
+
+        .complexity {
+            background: #eff6ff;
+            padding: 15px 20px;
+            border-left: 5px solid #2563eb;
+            border-radius: 6px;
+            line-height: 1.7;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #6b7280;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        <h1>📘 DAA Practical 4</h1>
+        <p>Design and Analysis of Algorithms — Session 2026-27</p>
+    </div>
+
+    <div class="container">
+
+        <!-- Back Button -->
+        <a href="index.html" class="back-btn">
+            ← Back to Dashboard
+        </a>
+
+        <!-- Problem Statement -->
+        <div class="section">
+            <h2>📌 Problem Statement</h2>
+
+            <p>
+                A government is planning a nationwide high-speed fiber
+                internet network connecting multiple cities. Each possible
+                cable connection between cities has a different installation
+                cost.
+            </p>
+
+            <p>
+                The government wants to connect all cities while minimizing
+                the total construction cost. The task is to determine the
+                minimum total cost required to connect all cities using
+                <b>Kruskal's Minimum Spanning Tree Algorithm</b>.
+            </p>
+        </div>
+
+        <!-- Algorithm -->
+        <div class="section">
+            <h2>⚙️ Algorithm — Kruskal's Algorithm</h2>
+
+            <ol>
+                <li>Represent the cities as vertices and cable connections as weighted edges.</li>
+                <li>Sort all edges in increasing order of their costs.</li>
+                <li>Start with an empty Minimum Spanning Tree (MST).</li>
+                <li>Select the edge with the smallest cost.</li>
+                <li>Check whether adding the edge creates a cycle.</li>
+                <li>If it does not create a cycle, add the edge to the MST.</li>
+                <li>Continue until all cities are connected.</li>
+                <li>Calculate and display the total minimum cost.</li>
+            </ol>
+        </div>
+
+        <!-- Input Graph -->
+        <div class="section">
+            <h2>📥 Input Graph</h2>
+
+            <p>
+                The following cities and cable connections are used for
+                demonstration:
+            </p>
+
+            <div class="output-box">Cities: A, B, C, D, E
+
+Edges:
+
+A - B : 4
+A - C : 2
+B - C : 1
+B - D : 5
+B - E : 7
+C - D : 8
+C - E : 10
+D - E : 2</div>
+        </div>
+
+        <!-- C Code -->
+        <div class="section">
+            <h2>💻 C Code</h2>
+
+            <div class="code-box">#include &lt;stdio.h&gt;
+
+#define MAX 20
+
+// Structure to store an edge
+struct Edge
+{
+    int source;
+    int destination;
+    int weight;
+};
+
+// Find the parent of a vertex
+int findParent(int parent[], int vertex)
+{
+    if (parent[vertex] == vertex)
+    {
+        return vertex;
+    }
+
+    return findParent(parent, parent[vertex]);
+}
+
+// Join two sets
+void unionSets(int parent[], int rank[], int u, int v)
+{
+    int rootU = findParent(parent, u);
+    int rootV = findParent(parent, v);
+
+    if (rootU != rootV)
+    {
+        if (rank[rootU] &lt; rank[rootV])
+        {
+            parent[rootU] = rootV;
+        }
+        else if (rank[rootU] &gt; rank[rootV])
+        {
+            parent[rootV] = rootU;
+        }
+        else
+        {
+            parent[rootV] = rootU;
+            rank[rootU]++;
+        }
+    }
+}
+
+// Sort edges using Bubble Sort
+void sortEdges(struct Edge edges[], int edgeCount)
+{
+    for (int i = 0; i &lt; edgeCount - 1; i++)
+    {
+        for (int j = 0; j &lt; edgeCount - i - 1; j++)
+        {
+            if (edges[j].weight &gt; edges[j + 1].weight)
+            {
+                struct Edge temp = edges[j];
+                edges[j] = edges[j + 1];
+                edges[j + 1] = temp;
+            }
+        }
+    }
+}
+
+int main()
+{
+    int vertices = 5;
+    int edgeCount = 8;
+
+    struct Edge edges[MAX] =
+    {
+        {0, 1, 4},
+        {0, 2, 2},
+        {1, 2, 1},
+        {1, 3, 5},
+        {1, 4, 7},
+        {2, 3, 8},
+        {2, 4, 10},
+        {3, 4, 2}
+    };
+
+    int parent[MAX];
+    int rank[MAX];
+
+    // Initialize each vertex as its own set
+    for (int i = 0; i &lt; vertices; i++)
+    {
+        parent[i] = i;
+        rank[i] = 0;
+    }
+
+    // Sort all edges according to weight
+    sortEdges(edges, edgeCount);
+
+    int totalCost = 0;
+    int edgesSelected = 0;
+
+    printf("Edges selected in Minimum Spanning Tree:\\n");
+
+    // Apply Kruskal's Algorithm
+    for (int i = 0; i &lt; edgeCount; i++)
+    {
+        int source = edges[i].source;
+        int destination = edges[i].destination;
+
+        int rootSource = findParent(parent, source);
+        int rootDestination = findParent(parent, destination);
+
+        // Add edge only if it does not create a cycle
+        if (rootSource != rootDestination)
+        {
+            printf("%c - %c : %d\\n",
+                   source + 'A',
+                   destination + 'A',
+                   edges[i].weight);
+
+            totalCost += edges[i].weight;
+
+            unionSets(parent, rank, rootSource, rootDestination);
+
+            edgesSelected++;
+
+            // MST contains V-1 edges
+            if (edgesSelected == vertices - 1)
+            {
+                break;
+            }
+        }
+    }
+
+    printf("\\nMinimum Total Cost = %d\\n", totalCost);
+
+    return 0;
+}</div>
+        </div>
+
+        <!-- Sorted Edges -->
+        <div class="section">
+            <h2>🔢 Edges After Sorting</h2>
+
+            <div class="output-box">B - C : 1
+A - C : 2
+D - E : 2
+A - B : 4
+B - D : 5
+B - E : 7
+C - D : 8
+C - E : 10</div>
+        </div>
+
+        <!-- Output -->
+        <div class="section">
+            <h2>📤 Output</h2>
+
+            <div class="output-box">Edges selected in Minimum Spanning Tree:
+
+B - C : 1
+A - C : 2
+D - E : 2
+B - D : 5
+
+Minimum Total Cost = 10</div>
+        </div>
+
+        <!-- Complexity -->
+        <div class="section">
+            <h2>⏱️ Time and Space Complexity</h2>
+
+            <div class="complexity">
+                <p>
+                    <b>Time Complexity:</b> O(E log E)
+                </p>
+
+                <p>
+                    The main time is used for sorting the edges according
+                    to their weights.
+                </p>
+
+                <p>
+                    <b>Space Complexity:</b> O(V + E)
+                </p>
+
+                <p>
+                    Here, V represents the number of vertices and E
+                    represents the number of edges.
+                </p>
+            </div>
+        </div>
+
+        <!-- Conclusion -->
+        <div class="section">
+            <h2>📝 Conclusion</h2>
+
+            <p>
+                Kruskal's Minimum Spanning Tree Algorithm was successfully
+                implemented to connect all cities with minimum total
+                construction cost. The edges were sorted according to their
+                weights and only those edges that did not form a cycle were
+                selected.
+            </p>
+
+            <p>
+                The minimum total cost for the given network is
+                <b>10</b>.
+            </p>
+        </div>
+
+    </div>
+
+    <footer>
+        DAA Practical 4 | Session 2026-27
+    </footer>
+
+</body>
+
+</html>
