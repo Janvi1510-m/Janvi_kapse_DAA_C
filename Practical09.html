@@ -1,1 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>DAA Practical 9</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #1f2937;
+        }
+
+        .header {
+            background: #172554;
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 30px;
+        }
+
+        .header p {
+            margin-top: 8px;
+            font-size: 16px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 18px;
+            background: #172554;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+
+        .back-btn:hover {
+            background: #1e3a8a;
+        }
+
+        .section {
+            background: white;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .section h2 {
+            color: #172554;
+            margin-top: 0;
+        }
+
+        pre {
+            background: #111827;
+            color: #f9fafb;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            line-height: 1.5;
+        }
+
+        .output {
+            background: #ecfdf5;
+            color: #065f46;
+            border-left: 5px solid #10b981;
+        }
+
+        .complexity {
+            background: #eff6ff;
+            border-left: 5px solid #2563eb;
+        }
+
+        ul,
+        ol {
+            line-height: 1.8;
+        }
+
+        .board {
+            border-collapse: collapse;
+            margin: 20px auto;
+        }
+
+        .board td {
+            width: 55px;
+            height: 55px;
+            text-align: center;
+            font-size: 28px;
+            border: 1px solid #374151;
+        }
+
+        .board tr:nth-child(odd) td:nth-child(odd),
+        .board tr:nth-child(even) td:nth-child(even) {
+            background: #dbeafe;
+        }
+
+        .board tr:nth-child(odd) td:nth-child(even),
+        .board tr:nth-child(even) td:nth-child(odd) {
+            background: #ffffff;
+        }
+
+        .formula {
+            background: #f3f4f6;
+            padding: 18px;
+            border-radius: 8px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>📘 DAA Practical 9</h1>
+        <p>Design and Analysis of Algorithms — Session 2026-27</p>
+    </div>
+
+    <div class="container">
+
+        <a href="index.html" class="back-btn">← Back to Dashboard</a>
+
+        <div class="section">
+            <h2>🎯 Problem Statement</h2>
+
+            <p>
+                You are designing a grid layout for a next-generation server
+                farm in Hyderabad or a cellular network tower distribution
+                system across a metropolitan area.
+            </p>
+
+            <p>
+                The grid is modeled as an <b>N × N</b> matrix. You must place
+                <b>N high-frequency antennas</b> on this grid.
+            </p>
+
+            <p>
+                To avoid electromagnetic interference, no two antennas can
+                share the same row, column, or diagonal line of sight.
+                This problem is known as the <b>N-Queens Problem</b>.
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>📋 Algorithm</h2>
+
+            <ol>
+                <li>Start with an empty N × N chessboard.</li>
+                <li>Place one antenna in each row.</li>
+                <li>Check whether the selected position is safe.</li>
+                <li>A position is safe if no antenna exists in the same column.</li>
+                <li>Check both diagonals for possible conflicts.</li>
+                <li>If the position is safe, place the antenna.</li>
+                <li>Move to the next row and repeat the process.</li>
+                <li>If no safe position is available, backtrack to the previous row.</li>
+                <li>Continue until all N antennas are placed.</li>
+            </ol>
+        </div>
+
+        <div class="section">
+            <h2>📐 Safety Conditions</h2>
+
+            <div class="formula">
+                Same Column: column[row] != column[i]
+
+                <br><br>
+
+                Same Diagonal:
+                abs(column[row] - column[i]) != abs(row - i)
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>💻 C Program</h2>
+
+            <pre>
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+#define N 4
+
+int board[N][N];
+
+// Check whether an antenna can be placed
+int isSafe(int row, int col)
+{
+    // Check the same column
+    for (int i = 0; i &lt; row; i++)
+    {
+        if (board[i][col] == 1)
+        {
+            return 0;
+        }
+    }
+
+    // Check upper-left diagonal
+    for (int i = row - 1, j = col - 1;
+         i &gt;= 0 &amp;&amp; j &gt;= 0;
+         i--, j--)
+    {
+        if (board[i][j] == 1)
+        {
+            return 0;
+        }
+    }
+
+    // Check upper-right diagonal
+    for (int i = row - 1, j = col + 1;
+         i &gt;= 0 &amp;&amp; j &lt; N;
+         i--, j++)
+    {
+        if (board[i][j] == 1)
+        {
+            return 0;
+        }
+    }
+
+    return 1;
+}
+
+// Solve N-Queens using backtracking
+int solveNQueens(int row)
+{
+    // All rows are completed
+    if (row == N)
+    {
+        return 1;
+    }
+
+    // Try every column in current row
+    for (int col = 0; col &lt; N; col++)
+    {
+        if (isSafe(row, col))
+        {
+            // Place antenna
+            board[row][col] = 1;
+
+            // Move to next row
+            if (solveNQueens(row + 1))
+            {
+                return 1;
+            }
+
+            // Backtrack
+            board[row][col] = 0;
+        }
+    }
+
+    return 0;
+}
+
+// Display the board
+void printBoard()
+{
+    printf("N-Queens Solution:\n\n");
+
+    for (int i = 0; i &lt; N; i++)
+    {
+        for (int j = 0; j &lt; N; j++)
+        {
+            if (board[i][j] == 1)
+            {
+                printf("Q ");
+            }
+            else
+            {
+                printf(". ");
+            }
+        }
+
+        printf("\n");
+    }
+}
+
+int main()
+{
+    // Initialize board with zeros
+    for (int i = 0; i &lt; N; i++)
+    {
+        for (int j = 0; j &lt; N; j++)
+        {
+            board[i][j] = 0;
+        }
+    }
+
+    // Solve N-Queens problem
+    if (solveNQueens(0))
+    {
+        printBoard();
+    }
+    else
+    {
+        printf("No solution exists.\n");
+    }
+
+    return 0;
+}
+            </pre>
+        </div>
+
+        <div class="section">
+            <h2>📥 Input</h2>
+
+            <p>
+                For this example:
+            </p>
+
+            <pre>
+N = 4
+            </pre>
+        </div>
+
+        <div class="section output">
+            <h2>📤 Output</h2>
+
+            <pre>
+N-Queens Solution:
+
+. Q . .
+. . . Q
+Q . . .
+. . Q .
+            </pre>
+        </div>
+
+        <div class="section">
+            <h2>♟️ Board Representation</h2>
+
+            <table class="board">
+                <tr>
+                    <td></td>
+                    <td>♛</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>♛</td>
+                </tr>
+
+                <tr>
+                    <td>♛</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>♛</td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>🔍 Result</h2>
+
+            <p>
+                The N-Queens problem is successfully solved using
+                backtracking. Four antennas are placed on a 4 × 4 grid
+                without sharing the same row, column, or diagonal.
+            </p>
+        </div>
+
+        <div class="section complexity">
+            <h2>⏱️ Time and Space Complexity</h2>
+
+            <p>
+                <b>Time Complexity:</b> O(N!)
+            </p>
+
+            <p>
+                <b>Space Complexity:</b> O(N²)
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>✅ Conclusion</h2>
+
+            <p>
+                The N-Queens problem is solved using the Backtracking
+                technique. The algorithm places antennas row by row and
+                backtracks whenever a safe position is not available.
+            </p>
+        </div>
+
+    </div>
+
+</body>
+</html>
