@@ -1,1 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>DAA Practical 2</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #1f2937;
+        }
+
+        /* Header */
+        .header {
+            background: #172554;
+            color: white;
+            padding: 30px 50px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 32px;
+        }
+
+        .header p {
+            margin-top: 8px;
+            font-size: 16px;
+        }
+
+        /* Back Button */
+        .back-btn {
+            display: inline-block;
+            margin-top: 18px;
+            padding: 10px 18px;
+            background: white;
+            color: #172554;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+
+        .back-btn:hover {
+            background: #e0e7ff;
+        }
+
+        /* Main Container */
+        .container {
+            width: 85%;
+            margin: 30px auto;
+        }
+
+        /* Sections */
+        .section {
+            background: white;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 10px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .section h2 {
+            color: #172554;
+            margin-top: 0;
+        }
+
+        /* Problem Statement */
+        .problem {
+            line-height: 1.7;
+            font-size: 16px;
+        }
+
+        /* Algorithm */
+        .algorithm ol {
+            line-height: 1.8;
+        }
+
+        /* Code */
+        pre {
+            background: #111827;
+            color: #f9fafb;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* Output */
+        .output {
+            background: #eef2ff;
+            padding: 18px;
+            border-radius: 8px;
+            font-family: monospace;
+            line-height: 1.6;
+        }
+
+        /* Complexity */
+        .complexity-box {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .complexity {
+            flex: 1;
+            min-width: 220px;
+            background: #f8fafc;
+            padding: 18px;
+            border-radius: 8px;
+            border-left: 5px solid #172554;
+        }
+
+        .complexity h3 {
+            color: #172554;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 25px;
+            background: #172554;
+            color: white;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <div class="header">
+
+        <h1>📘 DAA Practical 2</h1>
+
+        <p>
+            Design and Analysis of Algorithms — Session 2026-27
+        </p>
+
+        <!-- Back to Dashboard -->
+        <a href="index.html" class="back-btn">
+            ← Back to Dashboard
+        </a>
+
+    </div>
+
+
+    <div class="container">
+
+        <!-- Problem Statement -->
+        <div class="section">
+
+            <h2>📌 Problem Statement</h2>
+
+            <p class="problem">
+                Nalanda University maintains a large collection of ancient
+                manuscripts, each identified by a unique Archive ID.
+
+                Implement Binary Search to efficiently locate the first
+                occurrence of a given Archive ID in the sorted collection.
+            </p>
+
+        </div>
+
+
+        <!-- Algorithm -->
+        <div class="section algorithm">
+
+            <h2>⚙️ Algorithm — Binary Search</h2>
+
+            <ol>
+
+                <li>
+                    Start with the sorted array of Archive IDs.
+                </li>
+
+                <li>
+                    Set <b>low = 0</b> and <b>high = n - 1</b>.
+                </li>
+
+                <li>
+                    Find the middle element using
+                    <b>mid = low + (high - low) / 2</b>.
+                </li>
+
+                <li>
+                    If the middle element is equal to the target Archive ID,
+                    store its position and continue searching on the left side
+                    to find the first occurrence.
+                </li>
+
+                <li>
+                    If the middle element is smaller than the target,
+                    search in the right half.
+                </li>
+
+                <li>
+                    If the middle element is greater than the target,
+                    search in the left half.
+                </li>
+
+                <li>
+                    Continue until the first occurrence is found or the
+                    search range becomes empty.
+                </li>
+
+            </ol>
+
+        </div>
+
+
+        <!-- C Code -->
+        <div class="section">
+
+            <h2>💻 C Code</h2>
+
+            <pre>
+#include &lt;stdio.h&gt;
+
+int firstOccurrence(int arr[], int n, int target)
+{
+    int low = 0;
+    int high = n - 1;
+    int result = -1;
+
+    while (low &lt;= high)
+    {
+        int mid = low + (high - low) / 2;
+
+        if (arr[mid] == target)
+        {
+            result = mid;
+
+            /* Continue searching on the left side */
+            high = mid - 1;
+        }
+        else if (arr[mid] &lt; target)
+        {
+            low = mid + 1;
+        }
+        else
+        {
+            high = mid - 1;
+        }
+    }
+
+    return result;
+}
+
+int main()
+{
+    int archiveIDs[] = {
+        101, 104, 108, 112, 112,
+        112, 115, 119, 125, 130
+    };
+
+    int n = sizeof(archiveIDs) / sizeof(archiveIDs[0]);
+
+    int target = 112;
+
+    printf("Archive IDs:\n");
+
+    for (int i = 0; i &lt; n; i++)
+    {
+        printf("%d ", archiveIDs[i]);
+    }
+
+    int position = firstOccurrence(archiveIDs, n, target);
+
+    printf("\n\nSearching for Archive ID: %d\n", target);
+
+    if (position != -1)
+    {
+        printf("First occurrence found at index: %d\n", position);
+        printf("Position: %d\n", position + 1);
+    }
+    else
+    {
+        printf("Archive ID not found.\n");
+    }
+
+    return 0;
+}
+            </pre>
+
+        </div>
+
+
+        <!-- Output -->
+        <div class="section">
+
+            <h2>🖥️ Output</h2>
+
+            <div class="output">
+
+                Archive IDs:<br>
+                101 104 108 112 112 112 115 119 125 130
+
+                <br><br>
+
+                Searching for Archive ID: 112
+
+                <br><br>
+
+                First occurrence found at index: 3<br>
+                Position: 4
+
+            </div>
+
+        </div>
+
+
+        <!-- Complexity -->
+        <div class="section">
+
+            <h2>📊 Complexity Analysis</h2>
+
+            <div class="complexity-box">
+
+                <div class="complexity">
+
+                    <h3>⏱ Time Complexity</h3>
+
+                    <p>
+                        <b>Best Case:</b> O(1)
+                    </p>
+
+                    <p>
+                        <b>Worst / Average Case:</b> O(log n)
+                    </p>
+
+                </div>
+
+
+                <div class="complexity">
+
+                    <h3>💾 Space Complexity</h3>
+
+                    <p>
+                        <b>O(1)</b>
+                    </p>
+
+                    <p>
+                        Iterative Binary Search uses constant extra space.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Footer -->
+    <footer>
+
+        DAA Practical Repository • Janvi Kapse
+
+    </footer>
+
+</body>
+
+</html>
